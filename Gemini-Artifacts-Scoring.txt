@@ -1,0 +1,88 @@
+The exact payload keys, XML paths, and DOM selectors required from each source map directly to the four scoring dimensions.
+Part 1: Standard HTTP Calls (No Browser)
+1. Google Open Source Insights API (deps.dev)
+ * Endpoint 1 (Adoption & Metadata):
+   GET [https://api.deps.dev/v3alpha/systems/maven/packages/](https://api.deps.dev/v3alpha/systems/maven/packages/){groupId}%3A{artifactId}
+   * dependentCount (integer): Total count of downstream Maven packages in the ecosystem depending on this package.
+   * versions (array): Look at versions[i].versionKey.version to discover published release tags.
+ * Endpoint 2 (Security & Project Hygiene):
+   GET [https://api.deps.dev/v3alpha/projects/](https://api.deps.dev/v3alpha/projects/){projectKey}
+   (Note: Obtain {projectKey} directly from links or projectKey.id in Endpoint 1, e.g., [github.com/google/guava](https://github.com/google/guava))
+   * scorecard.overallScore (float, 0.0–10.0): OpenSSF composite security posture score.
+   * starsCount (integer): Upstream repository star count (social proof).
+   * forksCount (integer): Upstream repository fork count.
+2. Maven Central Solr Search API (search.maven.org)
+ * Endpoint:
+   GET [https://search.maven.org/solrsearch/select?q=g](https://search.maven.org/solrsearch/select?q=g):{groupId}+AND+a:{artifactId}&rows=1&wt=json
+ * Target Path in JSON: response.docs[0]
+   * versionCount (integer): Total count of versions ever published (measures development velocity and maturity).
+   * timestamp (integer): Millisecond epoch of the most recent release date.
+   * latestVersion (string): The canonical latest version string.
+   * ec (array of strings): Published packaging extensions (e.g., [".jar", "-sources.jar", "-javadoc.jar"]).
+     * Check if ec.includes("-sources.jar") (IDE navigation).
+     * Check if ec.includes("-javadoc.jar") (IDE documentation).
+3. Canonical Repository Metadata (repo1.maven.org)
+ * Endpoint:
+   GET [https://repo1.maven.org/maven2/](https://repo1.maven.org/maven2/){groupPath}/{artifactId}/maven-metadata.xml
+ * Target Elements in XML:
+   * //metadata/versioning/lastUpdated (string): Canonical UTC timestamp formatted as YYYYMMDDHHMMSS (authoritative fallback for release recency).
+   * //metadata/versioning/release or //metadata/versioning/latest (string): Verified latest production release tag.
+   * //metadata/versioning/versions/version (array/node list): Full catalog of all released versions to verify release frequency over specific time windows.
+4. OSV.dev (Open Source Vulnerabilities) API
+ * Endpoint:
+   POST [https://api.osv.dev/v1/query](https://api.osv.dev/v1/query)
+   * Request Body:
+     {
+  "package": {
+    "name": "{groupId}:{artifactId}",
+    "ecosystem": "Maven"
+  },
+  "version": "{targetLatestVersion}"
+}
+
+ * Target Fields in JSON Response:
+   * vulns (array): List of matching active security advisories. If undefined or empty array [], zero vulnerabilities are present.
+   * vulns[i].id (string): Advisory ID (GHSA-... or CVE-...).
+   * vulns[i].database_specific.severity (string): Severity indicator (LOW, MEDIUM, HIGH, CRITICAL) to calculate negative penalty points.
+Part 2: Playwright Extraction (Targeted Headless Scrapes)
+1. Sonatype Central (central.sonatype.com)
+ * Target Page:
+   [https://central.sonatype.com/artifact/](https://central.sonatype.com/artifact/){groupId}/{artifactId}/dependents
+ * Preferred Approach (Network Interception):
+   Intercept the internal JSON API request that the client SPA issues on load:
+   * Intercepted Route: **/api/v1/artifacts/dependents**
+   * Fields:
+     * total or count (integer): Total dependent count registered by Sonatype.
+     * direct vs transitive breakdown (integers): Evaluates whether projects consume this artifact as a root dependency or an indirect requirement.
+ * DOM Approach (CSS Selectors):
+   If parsing the DOM directly:
+   * Direct Dependents Badge: page.locator('button:has-text("Direct Dependents")') or [data-testid="direct-dependents-count"] -> parse integer count.
+   * Transitive Dependents Badge: page.locator('button:has-text("Transitive Dependents")') -> parse integer count.
+2. Libraries.io (libraries.io)
+ * Target Page:
+   [https://libraries.io/maven/](https://libraries.io/maven/){groupId}:{artifactId}
+ * Target Fields & Selectors in DOM:
+   * Dependent Repositories (Application Usage):
+     * Selector: a[href*="/dependent_repositories"]
+     * Data to Extract: Number of actual GitHub/GitLab application repositories consuming this artifact.
+   * Dependent Packages (Library Usage):
+     * Selector: a[href*="/dependents"]
+     * Data to Extract: Number of other libraries that package this artifact.
+   * SourceRank Metric:
+     * Selector: a[href*="/sourcerank"] or .sourcerank-score
+     * Data to Extract: Composite code repository quality score (integer, typically 0 to 30+) evaluating test suites, licenses, semantic versioning, and README presence.
+Mapping Fields to the Weighted Scoring Model
+Total Score (0–100) =
+  + [0–35 pts] Adoption:
+      • deps.dev (`dependentCount`)
+      • Libraries.io (`dependent_repositories` count)
+      • Sonatype Central (`direct` dependents)
+  + [0–25 pts] Freshness & Velocity:
+      • search.maven.org (`timestamp` & `versionCount`)
+      • repo1.maven.org (`<lastUpdated>`)
+  + [0–25 pts] Security & Hygiene:
+      • api.osv.dev (Deduct points if `vulns` array has HIGH/CRITICAL)
+      • deps.dev (`scorecard.overallScore`) OR Libraries.io (`SourceRank`)
+  + [0–15 pts] IDE & Usability:
+      • search.maven.org (`ec` containing "-sources.jar" and "-javadoc.jar")
+
