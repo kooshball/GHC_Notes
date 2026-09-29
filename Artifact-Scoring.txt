@@ -1,0 +1,531 @@
+{
+  "coordinate": {
+    "groupId": "com.fasterxml.jackson.core",
+    "artifactId": "jackson-core",
+    "version": "2.14.0"
+  },
+  "http_sources": {
+    "deps_dev": {
+      "dependentCount": 54200,
+      "starsCount": 2100,
+      "forksCount": 940,
+      "scorecard": {
+        "overallScore": 6.8,
+        "date": "2026-09-20T00:00:00Z",
+        "checks": [
+          { "name": "Maintained", "score": 10, "reason": "30 commit(s) and 15 issue activity found in the last 90 days" },
+          { "name": "Security-Policy", "score": 10, "reason": "security policy file detected: SECURITY.md:1" },
+          { "name": "Code-Review", "score": 0, "reason": "Found 1/30 approved changesets -- score normalized to 0" },
+          { "name": "Dangerous-Workflow", "score": 10, "reason": "no dangerous workflow patterns detected" },
+          { "name": "Binary-Artifacts", "score": 10, "reason": "no binaries found in the repo" },
+          { "name": "Token-Permissions", "score": 0, "reason": "detected GitHub workflow tokens with excessive permissions" },
+          { "name": "Pinned-Dependencies", "score": 10, "reason": "all dependencies are pinned" },
+          { "name": "Fuzzing", "score": 10, "reason": "OSSFuzz integration found" },
+          { "name": "License", "score": 10, "reason": "FSF or OSI recognized license: Apache License 2.0: LICENSE:0" },
+          { "name": "Branch-Protection", "score": 3, "reason": "branch protection is not maximal on development and all release branches" },
+          { "name": "SAST", "score": 0, "reason": "SAST tool is not run on all commits -- score normalized to 0" },
+          { "name": "Packaging", "score": 10, "reason": "packaging workflow detected" }
+        ]
+      }
+    },
+    "search_maven_org": {
+      "versionCount": 164,
+      "timestamp": 1667683200000,
+      "latestVersion": "2.21.4",
+      "ec": [
+        ".jar",
+        "-sources.jar",
+        "-javadoc.jar",
+        ".pom"
+      ]
+    },
+    "repo1_maven_org": {
+      "lastUpdated": "20221105212000",
+      "release": "2.14.0",
+      "latest": "2.14.0"
+    },
+    "osv_dev": {
+      "vulns": [
+        {
+          "id": "GHSA-rf6v-86w5-mf35",
+          "summary": "Jackson-core Denial of Service via deeply nested JSON structures",
+          "details": "A flaw was found in jackson-core. In affected versions, parsing deeply nested JSON arrays or objects can cause a `StackOverflowError`, resulting in an unhandled denial-of-service condition.",
+          "aliases": [
+            "CVE-2023-35887"
+          ],
+          "modified": "2024-02-16T18:05:00Z",
+          "published": "2023-06-21T12:00:00Z",
+          "database_specific": {
+            "severity": "HIGH",
+            "cwe_ids": [
+              "CWE-674",
+              "CWE-400"
+            ],
+            "github_reviewed": true
+          },
+          "affected": [
+            {
+              "package": {
+                "ecosystem": "Maven",
+                "name": "com.fasterxml.jackson.core:jackson-core",
+                "purl": "pkg:maven/com.fasterxml.jackson.core/jackson-core"
+              },
+              "ranges": [
+                {
+                  "type": "ECOSYSTEM",
+                  "events": [
+                    { "introduced": "0" },
+                    { "fixed": "2.15.0" }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "GHSA-c43q-5hpj-4c6r",
+          "summary": "StackOverflowError when reading deeply nested BigInteger/BigDecimal numbers",
+          "details": "When tokenizing and parsing extremely large numeric representations or exponential notation, `jackson-core` can trigger resource exhaustion prior to applying parse constraints.",
+          "aliases": [
+            "CVE-2022-45688"
+          ],
+          "modified": "2023-11-08T04:10:00Z",
+          "published": "2022-12-14T15:30:00Z",
+          "database_specific": {
+            "severity": "MEDIUM",
+            "cwe_ids": [
+              "CWE-400"
+            ],
+            "github_reviewed": true
+          },
+          "affected": [
+            {
+              "package": {
+                "ecosystem": "Maven",
+                "name": "com.fasterxml.jackson.core:jackson-core",
+                "purl": "pkg:maven/com.fasterxml.jackson.core/jackson-core"
+              },
+              "ranges": [
+                {
+                  "type": "ECOSYSTEM",
+                  "events": [
+                    { "introduced": "0" },
+                    { "fixed": "2.14.2" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "playwright_sources": {
+    "central_sonatype_com": {
+      "directDependentsCount": 42800,
+      "transitiveDependentsCount": 189000
+    },
+    "libraries_io": {
+      "dependentRepositoriesCount": 210000,
+      "dependentPackagesCount": 6120,
+      "sourceRank": 28
+    }
+  }
+}
+
+{
+  "artifacts": [
+    {
+      "coordinate": {
+        "groupId": "com.fasterxml.jackson.core",
+        "artifactId": "jackson-core",
+        "version": "2.21.4"
+      },
+      "http_sources": {
+        "deps_dev": {
+          "dependentCount": 54200,
+          "starsCount": 2100,
+          "forksCount": 940,
+          "scorecard": {
+            "overallScore": 6.8,
+            "date": "2026-09-20T00:00:00Z",
+            "checks": [
+              { "name": "Maintained", "score": 10, "reason": "30 commit(s) and 15 issue activity found in the last 90 days" },
+              { "name": "Security-Policy", "score": 10, "reason": "security policy file detected: SECURITY.md:1" },
+              { "name": "Code-Review", "score": 0, "reason": "Found 1/30 approved changesets -- score normalized to 0" },
+              { "name": "Dangerous-Workflow", "score": 10, "reason": "no dangerous workflow patterns detected" },
+              { "name": "Binary-Artifacts", "score": 10, "reason": "no binaries found in the repo" },
+              { "name": "Token-Permissions", "score": 0, "reason": "detected GitHub workflow tokens with excessive permissions" },
+              { "name": "Pinned-Dependencies", "score": 10, "reason": "all dependencies are pinned" },
+              { "name": "Fuzzing", "score": 10, "reason": "OSSFuzz integration found" },
+              { "name": "License", "score": 10, "reason": "FSF or OSI recognized license: Apache License 2.0: LICENSE:0" },
+              { "name": "Branch-Protection", "score": 3, "reason": "branch protection is not maximal on development and all release branches" },
+              { "name": "SAST", "score": 0, "reason": "SAST tool is not run on all commits -- score normalized to 0" },
+              { "name": "Packaging", "score": 10, "reason": "packaging workflow detected" }
+            ]
+          }
+        },
+        "search_maven_org": {
+          "versionCount": 164,
+          "timestamp": 1785680460000,
+          "latestVersion": "2.21.4",
+          "ec": [
+            ".jar",
+            "-sources.jar",
+            "-javadoc.jar",
+            ".pom"
+          ]
+        },
+        "repo1_maven_org": {
+          "lastUpdated": "20260801142100",
+          "release": "2.21.4",
+          "latest": "2.21.4"
+        },
+        "osv_dev": {
+          "vulns": []
+        }
+      },
+      "playwright_sources": {
+        "central_sonatype_com": {
+          "directDependentsCount": 42800,
+          "transitiveDependentsCount": 189000
+        },
+        "libraries_io": {
+          "dependentRepositoriesCount": 210000,
+          "dependentPackagesCount": 6120,
+          "sourceRank": 28
+        }
+      }
+    },
+    {
+      "coordinate": {
+        "groupId": "com.fasterxml.jackson.core",
+        "artifactId": "jackson-annotations",
+        "version": "2.21"
+      },
+      "http_sources": {
+        "deps_dev": {
+          "dependentCount": 25100,
+          "starsCount": 3820,
+          "forksCount": 1150,
+          "scorecard": {
+            "overallScore": 6.8,
+            "date": "2026-08-20T00:00:00Z",
+            "checks": [
+              { "name": "Maintained", "score": 10, "reason": "30 commit(s) and 15 issue activity found in the last 90 days" },
+              { "name": "Code-Review", "score": 0, "reason": "Found 1/30 approved changesets" },
+              { "name": "CII-Best-Practices", "score": 0, "reason": "no effort to earn an OpenSSF best practices badge detected" },
+              { "name": "Vulnerabilities", "score": 10, "reason": "0 existing vulnerabilities detected" },
+              { "name": "Signed-Releases", "score": -1, "reason": "no releases found" },
+              { "name": "Branch-Protection", "score": 3, "reason": "branch protection is not maximal on development and all release branches" },
+              { "name": "Security-Policy", "score": 10, "reason": "security policy file detected" },
+              { "name": "Dangerous-Workflow", "score": 10, "reason": "no dangerous workflow patterns detected" },
+              { "name": "Token-Permissions", "score": 0, "reason": "detected GitHub workflow tokens with excessive permissions" },
+              { "name": "Binary-Artifacts", "score": 10, "reason": "no binaries found in the repo" },
+              { "name": "Pinned-Dependencies", "score": 7, "reason": "dependency not pinned by hash" },
+              { "name": "Fuzzing", "score": 10, "reason": "OSSFuzz integration found" },
+              { "name": "License", "score": 10, "reason": "FSF or OSI recognized license: Apache License 2.0" },
+              { "name": "SAST", "score": 0, "reason": "SAST tool is not run on all commits" },
+              { "name": "Packaging", "score": 10, "reason": "packaging workflow detected" }
+            ]
+          }
+        },
+        "search_maven_org": {
+          "versionCount": 116,
+          "timestamp": 1776075300000,
+          "latestVersion": "2.21",
+          "ec": [
+            ".jar",
+            "-sources.jar",
+            "-javadoc.jar",
+            ".pom"
+          ]
+        },
+        "repo1_maven_org": {
+          "lastUpdated": "20260412101500",
+          "release": "2.21",
+          "latest": "2.21"
+        },
+        "osv_dev": {
+          "vulns": []
+        }
+      },
+      "playwright_sources": {
+        "central_sonatype_com": {
+          "directDependentsCount": 18450,
+          "transitiveDependentsCount": 92100
+        },
+        "libraries_io": {
+          "dependentRepositoriesCount": 95200,
+          "dependentPackagesCount": 2480,
+          "sourceRank": 25
+        }
+      }
+    },
+    {
+      "coordinate": {
+        "groupId": "com.fasterxml.jackson.core",
+        "artifactId": "jackson-databind",
+        "version": "2.21.4"
+      },
+      "http_sources": {
+        "deps_dev": {
+          "dependentCount": 38900,
+          "starsCount": 4150,
+          "forksCount": 1350,
+          "scorecard": {
+            "overallScore": 7.4,
+            "date": "2026-09-15T00:00:00Z",
+            "checks": [
+              { "name": "Maintained", "score": 10, "reason": "30 commit(s) in last 90 days" },
+              { "name": "Code-Review", "score": 1, "reason": "Low percentage of changesets reviewed" },
+              { "name": "Vulnerabilities", "score": 10, "reason": "0 existing vulnerabilities detected" },
+              { "name": "Branch-Protection", "score": 4, "reason": "Branch protection rules present on main" },
+              { "name": "Security-Policy", "score": 10, "reason": "SECURITY.md present" },
+              { "name": "Dangerous-Workflow", "score": 10, "reason": "No dangerous patterns detected" },
+              { "name": "Token-Permissions", "score": 0, "reason": "Tokens have write permissions" },
+              { "name": "Binary-Artifacts", "score": 10, "reason": "No compiled binaries stored in repo" },
+              { "name": "Pinned-Dependencies", "score": 8, "reason": "Action dependencies pinned" },
+              { "name": "Fuzzing", "score": 10, "reason": "OSSFuzz integrated" },
+              { "name": "License", "score": 10, "reason": "Apache-2.0" },
+              { "name": "Packaging", "score": 10, "reason": "Published as package" }
+            ]
+          }
+        },
+        "search_maven_org": {
+          "versionCount": 142,
+          "timestamp": 1785680520000,
+          "latestVersion": "2.21.4",
+          "ec": [
+            ".jar",
+            "-sources.jar",
+            "-javadoc.jar",
+            ".pom"
+          ]
+        },
+        "repo1_maven_org": {
+          "lastUpdated": "20260801142200",
+          "release": "2.21.4",
+          "latest": "2.21.4"
+        },
+        "osv_dev": {
+          "vulns": []
+        }
+      },
+      "playwright_sources": {
+        "central_sonatype_com": {
+          "directDependentsCount": 31200,
+          "transitiveDependentsCount": 145000
+        },
+        "libraries_io": {
+          "dependentRepositoriesCount": 162000,
+          "dependentPackagesCount": 4190,
+          "sourceRank": 27
+        }
+      }
+    },
+    {
+      "coordinate": {
+        "groupId": "com.fasterxml.jackson.datatype",
+        "artifactId": "jackson-datatype-javax-money",
+        "version": "2.13.0"
+      },
+      "http_sources": {
+        "deps_dev": {
+          "dependentCount": 4,
+          "starsCount": 110,
+          "forksCount": 85,
+          "scorecard": null
+        },
+        "search_maven_org": {
+          "versionCount": 18,
+          "timestamp": 1633036800000,
+          "latestVersion": "2.13.0",
+          "ec": [
+            ".jar",
+            "-sources.jar",
+            "-javadoc.jar",
+            ".pom"
+          ]
+        },
+        "repo1_maven_org": {
+          "lastUpdated": "20210930212000",
+          "release": "2.13.0",
+          "latest": "2.13.0"
+        },
+        "osv_dev": {
+          "vulns": []
+        }
+      },
+      "playwright_sources": {
+        "central_sonatype_com": {
+          "directDependentsCount": 4,
+          "transitiveDependentsCount": 9
+        },
+        "libraries_io": {
+          "dependentRepositoriesCount": 12,
+          "dependentPackagesCount": 3,
+          "sourceRank": 14
+        }
+      }
+    },
+    {
+      "coordinate": {
+        "groupId": "org.eclipse.jetty.http2",
+        "artifactId": "jetty-http2-client",
+        "version": "12.0.36"
+      },
+      "http_sources": {
+        "deps_dev": {
+          "dependentCount": 325,
+          "starsCount": 4120,
+          "forksCount": 1940,
+          "scorecard": {
+            "overallScore": 7.9,
+            "date": "2026-07-10T00:00:00Z",
+            "checks": [
+              { "name": "Maintained", "score": 10, "reason": "Active commit activity" },
+              { "name": "Code-Review", "score": 10, "reason": "All PRs require multi-committer signoff" },
+              { "name": "Vulnerabilities", "score": 10, "reason": "0 known unpatched vulnerabilities" },
+              { "name": "Security-Policy", "score": 10, "reason": "Eclipse Foundation security disclosures active" },
+              { "name": "Dangerous-Workflow", "score": 10, "reason": "GitHub workflows restricted" },
+              { "name": "Token-Permissions", "score": 0, "reason": "Write permissions detected in release pipelines" },
+              { "name": "Binary-Artifacts", "score": 10, "reason": "No binary artifacts committed" },
+              { "name": "Pinned-Dependencies", "score": 6, "reason": "Some actions unpinned" },
+              { "name": "License", "score": 10, "reason": "EPL-2.0 and Apache-2.0 dual licensed" }
+            ]
+          }
+        },
+        "search_maven_org": {
+          "versionCount": 45,
+          "timestamp": 1784106720000,
+          "latestVersion": "12.0.36",
+          "ec": [
+            ".jar",
+            "-sources.jar",
+            "-javadoc.jar",
+            ".pom"
+          ]
+        },
+        "repo1_maven_org": {
+          "lastUpdated": "20260715091200",
+          "release": "12.0.36",
+          "latest": "12.0.36"
+        },
+        "osv_dev": {
+          "vulns": []
+        }
+      },
+      "playwright_sources": {
+        "central_sonatype_com": {
+          "directDependentsCount": 248,
+          "transitiveDependentsCount": 890
+        },
+        "libraries_io": {
+          "dependentRepositoriesCount": 1240,
+          "dependentPackagesCount": 42,
+          "sourceRank": 23
+        }
+      }
+    }
+  ]
+}
+
+
+The scoring model evaluates each artifact on a 0 to 100 point scale divided across four operational dimensions, followed by a hard security gatekeeper.
+All formulas map directly to the exact JSON keys present in http_sources and playwright_sources.
+Score Breakdown (100 Points Total)
++-----------------------------------------------------------------------+
+|  Dimension 1: Ecosystem Adoption (35 pts)                             |
+|  - deps_dev.dependentCount (15 pts)                                   |
+|  - libraries_io.dependentRepositoriesCount (12 pts)                   |
+|  - deps_dev.starsCount (8 pts)                                        |
++-----------------------------------------------------------------------+
+|  Dimension 2: Freshness & Velocity (25 pts)                           |
+|  - search_maven_org.timestamp / repo1_maven_org.lastUpdated (15 pts)   |
+|  - search_maven_org.versionCount (10 pts)                             |
++-----------------------------------------------------------------------+
+|  Dimension 3: Security & Hygiene (25 pts)                             |
+|  - osv_dev.vulns active severity penalty (15 pts)                     |
+|  - deps_dev.scorecard.overallScore OR libraries_io.sourceRank (10 pts)|
++-----------------------------------------------------------------------+
+|  Dimension 4: Packaging & IDE Usability (15 pts)                      |
+|  - search_maven_org.ec (Presence of .jar, -sources, -javadoc) (15 pts)|
++-----------------------------------------------------------------------+
+
+Detailed Formulas by Dimension
+1. Ecosystem Adoption (35 Points Max)
+Uses logarithmic scaling to prevent massive libraries from compressing niche or mid-tier tools to zero.
+ * Maven Package Reach (15 pts):
+   
+   
+   (Alternative fallback: substitute playwright_sources.central_sonatype_com.directDependentsCount)
+ * Application Consumer Reach (12 pts):
+   
+ * Social Proof / Stargazers (8 pts):
+   
+2. Maintenance Freshness & Velocity (25 Points Max)
+ * Release Recency (15 pts):
+   Calculate age from http_sources.search_maven_org.timestamp (or parse http_sources.repo1_maven_org.lastUpdated):
+   * < 6 months: 15 pts
+   * 6–12 months: 12 pts
+   * 12–24 months: 8 pts
+   * 24–36 months: 4 pts
+   * > 36 months: 0 pts
+ * Release Velocity & Cadence (10 pts):
+   Based on http_sources.search_maven_org.versionCount:
+   * \ge 10 versions: 10 pts (proven release lifecycle)
+   * 3–9 versions: 6 pts
+   * 2 versions: 3 pts
+   * 1 version: 1 pt (high risk of an abandoned one-off upload)
+3. Security Posture & Hygiene (25 Points Max)
+ * Active Vulnerability Baseline (15 pts):
+   Inspect http_sources.osv_dev.vulns:
+   * No vulnerabilities reported ([] or null): 15 pts
+   * Only LOW or MEDIUM advisories present: 7 pts
+   * Any HIGH or CRITICAL advisory present: 0 pts
+ * Repository Supply Chain Hygiene (10 pts):
+   * If scorecard is present:
+     
+   * If scorecard is null: Use playwright_sources.libraries_io.sourceRank (scale 0–30):
+     
+4. Packaging & IDE Experience (15 Points Max)
+Evaluates developer experience inside Gradle and IntelliJ/Android Studio by checking http_sources.search_maven_org.ec:
+ * ec.contains(".jar") or ec.contains(".aar"): +5 pts (binary ready)
+ * ec.contains("-sources.jar"): +5 pts (IDE navigation & debugging)
+ * ec.contains("-javadoc.jar"): +5 pts (in-editor API documentation)
+Gatekeeper Rule (Automatic Rejection)
+Before assigning a final score, check for hard blockers:
+> Hard Veto: If http_sources.osv_dev.vulns contains any vulnerability with database_specific.severity == "CRITICAL", the artifact receives an automatic REJECT, regardless of its numerical score.
+> 
+Ingestion Decision Matrix for libs.versions.toml
+| Total Score | Status | Action for Gradle Catalog |
+|---|---|---|
+| \ge 70 | APPROVED | Automatically generate alias and write to libs.versions.toml. |
+| 45 – 69 | REVIEW | Add under a # Needs Review comment block (usually stable utilities, internal corporate tools, or niche domain modules). |
+| < 45 | REJECTED | Exclude from catalog; flag to team as abandoned or risky. |
+Worked Examples from the JSON
+| Artifact | Adoption (35) | Freshness (25) | Security (25) | Packaging (15) | Total Score | Verdict |
+|---|---|---|---|---|---|---|
+| jackson-annotations:2.21 | 35.0 | 25.0 | 21.8 | 15.0 | 96.8 | APPROVED |
+| jackson-core:2.14.0 | 35.0 | 4.0 | 6.8 | 15.0 | 60.8 | FLAGGED / REJECT (High CVE in OSV) |
+| jackson-datatype-javax-money:2.13.0 | 5.8 | 0.0 | 19.7 | 15.0 | 40.5 | REJECTED (Stale >3 yrs, low adoption) |
+| jetty-http2-client:12.0.36 | 22.4 | 25.0 | 22.9 | 15.0 | 85.3 | APPROVED |
+
+
+Here is the missing rule filled in:
+If scorecard is present:
+The OpenSSF Scorecard overall score is already normalized on a 0.0 to 10.0 scale, so it maps directly 1:1 into your 10-point bucket:
+Complete Dimension 3 Breakdown (25 Points Max)
+ * Active Vulnerability Baseline (15 pts):
+   Inspect http_sources.osv_dev.vulns:
+   * 0 active advisories ([] or null): 15 pts
+   * Only LOW or MEDIUM advisories: 7 pts
+   * Any HIGH or CRITICAL advisory: 0 pts
+ * Repository Supply Chain Hygiene (10 pts):
+   * If scorecard is present:
+     
+   * If scorecard is null (Fallback to Libraries.io sourceRank):
+     
+   * If both are unavailable: Assign a neutral baseline of 5.0 pts.
+
