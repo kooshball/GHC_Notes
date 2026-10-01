@@ -1,0 +1,38 @@
+
+I have a custom Gradle task using Kotlin as the implementation language that uses com.microsoft.playwright:playwright:1.62.0 & com.microsoft.playwright:driver-bundle:1.62.0.  Currently for 650 Maven artifacts, it launches 5 headless chrome browsers to execute web scraping from the following sources:
+websites like Sonatype, Maven Central, Libraries.io, etc. for Maven artifacts.  
+
+to create a NEW custom Gradle task called "task #05b - " using Kotlin as the implementation language to execute web scraping across 10 parallel workers using Gradle's native Worker API and Playwright with Google Chrome.
+
+
+Using Gradle's native Worker API, the work will be spread across multiple worker threads by distributing chunks across Gradle's managed thread pool.  Each dedicated worker thread will own 1 Playwright + 1 headless Chrome Browser
+
+
+### Target Architecture & Constraints:
+1. Environment & Framework:
+   - Use Gradle's native `WorkerExecutor` with `noIsolation()`.
+   - Do NOT use Spring Batch or external thread pools like `Executors.newFixedThreadPool`. Let Gradle handle concurrency and daemon lifecycle.
+   - Target Gradle `org.gradle.workers.max=10`.
+
+2. Playwright & Browser Configuration:
+   - Do NOT use bundled Chromium.
+   - Use system-installed Google Chrome via:
+     `playwright.chromium().launch(BrowserType.LaunchOptions().setChannel("chrome").setHeadless(true))`
+
+3. Thread Confinement (CRITICAL):
+   - Playwright is strictly NOT thread-safe.
+   - Each `WorkAction.execute()` method must instantiate and safely close (`.use { ... }`) its OWN distinct `Playwright` and `Browser` instance. 
+   - Never pass `Playwright`, `Browser`, `BrowserContext`, or `Page` objects across tasks, actions, parameters, or threads.
+
+4. Context & Resource Lifecycle:
+   - Chunk the collection of 650 artifacts into 10 partitions (~65 items each).
+   - Within each worker's partition loop, reuse the worker's single `Browser` instance.
+   - For every individual artifact URL, create and close a dedicated `BrowserContext` via `browser.newContext().use { context -> ... }` to keep sessions, cookies, and cache isolated.
+   - Add try/catch around individual URL navigation so a single timeout or 404 does not crash the entire partition.
+
+### Deliverables Needed:
+1. A serializable data class `ArtifactCoordinate(val groupId: String, val artifactId: String, val version: String) : Serializable`.
+2. A `WorkParameters` interface `ScrapePartitionParameters` with Gradle properties for worker ID, artifact list chunk, and output directory.
+3. The `PlaywrightScrapeAction : WorkAction<ScrapePartitionParameters>` implementation with proper cleanup.
+4. The custom `DefaultTask` class injecting `WorkerExecutor` that partitions the input and dispatches to `workQueue.submit(...)`.
+5. An example task registration block in `build.gradle.kts`.
