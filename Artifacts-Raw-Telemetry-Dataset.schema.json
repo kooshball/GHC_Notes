@@ -1,0 +1,334 @@
+﻿{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://example.com/schemas/artifacts-raw-telemetry.schema.json",
+ "title": "ArtifactsRawTelemetryDataset",
+ "description": "Consolidated raw telemetry dataset for Maven artifacts evaluated via headless Playwright extraction and unauthenticated HTTP endpoints.",
+ "type": "object",
+ "required": [
+   "artifacts"
+ ],
+ "properties": {
+   "artifacts": {
+     "type": "array",
+     "description": "Collection of individual artifact telemetry records.",
+     "items": {
+       "$ref": "#/$defs/ArtifactTelemetryRecord"
+     }
+   }
+ },
+ "additionalProperties": false,
+ "$defs": {
+   "ArtifactTelemetryRecord": {
+     "type": "object",
+     "description": "Raw metadata and scraping telemetry for a single Maven coordinate.",
+     "required": [
+       "coordinate",
+       "http_sources",
+       "playwright_sources"
+     ],
+     "properties": {
+       "coordinate": {
+         "type": "object",
+         "description": "Artifact coordinate definition with BOM version alignment.",
+         "required": [
+           "groupId",
+           "artifactId",
+           "bomVersion",
+           "version"
+         ],
+         "properties": {
+           "groupId": {
+             "type": "string",
+             "description": "Maven groupId (e.g., com.fasterxml.jackson.core)."
+           },
+           "artifactId": {
+             "type": "string",
+             "description": "Maven artifactId (e.g., jackson-databind)."
+           },
+           "bomVersion": {
+             "type": "string",
+             "description": "Target aligned BOM version (e.g., 2.21.4 or 12.0.36)."
+           },
+           "version": {
+             "type": "string",
+             "description": "Specific pinned version, or an empty string when the version is directly inherited from the BOM."
+           }
+         },
+         "additionalProperties": false
+       },
+       "http_sources": {
+         "type": "object",
+         "description": "Telemetry retrieved from unauthenticated REST endpoints executed in-page via Playwright.",
+         "required": [
+           "deps_dev",
+           "search_maven_org",
+           "repo1_maven_org",
+           "osv_dev"
+         ],
+         "properties": {
+           "deps_dev": {
+             "type": "object",
+             "description": "Metadata, usage, and OpenSSF Scorecard from Google Open Source Insights (deps.dev).",
+             "required": [
+               "dependentCount",
+               "starsCount",
+               "forksCount",
+               "scorecard"
+             ],
+             "properties": {
+               "dependentCount": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "description": "Known downstream Maven packages depending on this artifact release."
+               },
+               "starsCount": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "description": "Star count of the upstream source repository."
+               },
+               "forksCount": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "description": "Fork count of the upstream source repository."
+               },
+               "scorecard": {
+                 "description": "OpenSSF Scorecard evaluation. Null if the upstream repository has not been scanned.",
+                 "oneOf": [
+                   {
+                     "type": "null"
+                   },
+                   {
+                     "type": "object",
+                     "required": [
+                       "overallScore",
+                       "date",
+                       "checks"
+                     ],
+                     "properties": {
+                       "overallScore": {
+                         "type": "number",
+                         "minimum": 0.0,
+                         "maximum": 10.0,
+                         "description": "Aggregate score across all evaluated OpenSSF security criteria."
+                       },
+                       "date": {
+                         "type": "string",
+                         "format": "date-time",
+                         "description": "ISO 8601 timestamp of the Scorecard assessment."
+                       },
+                       "checks": {
+                         "type": "array",
+                         "description": "Detailed breakdown of individual OpenSSF checks.",
+                         "items": {
+                           "type": "object",
+                           "required": [
+                             "name",
+                             "score",
+                             "reason"
+                           ],
+                           "properties": {
+                             "name": {
+                               "type": "string",
+                               "description": "Identifier of the check (e.g., Maintained, Code-Review, Vulnerabilities)."
+                             },
+                             "score": {
+                               "type": "integer",
+                               "minimum": -1,
+                               "maximum": 10,
+                               "description": "Score assigned to the check (-1 for inconclusive/not applicable)."
+                             },
+                             "reason": {
+                               "type": "string",
+                               "description": "Maintainer notes or heuristic detection explanation for the score."
+                             }
+                           },
+                           "additionalProperties": false
+                         }
+                       }
+                     },
+                     "additionalProperties": false
+                   }
+                 ]
+               }
+             },
+             "additionalProperties": false
+           },
+           "search_maven_org": {
+             "type": "object",
+             "description": "Release cadence, packaging, and catalog timestamps from Maven Central Solr API.",
+             "required": [
+               "versionCount",
+               "timestamp",
+               "latestVersion",
+               "ec"
+             ],
+             "properties": {
+               "versionCount": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "description": "Total historical versions published under this coordinate."
+               },
+               "timestamp": {
+                 "type": "integer",
+                 "description": "Publication timestamp of the target release in epoch milliseconds."
+               },
+               "latestVersion": {
+                 "type": "string",
+                 "description": "Highest semantic version published in Maven Central."
+               },
+               "ec": {
+                 "type": "array",
+                 "description": "Extension and classifier attachments present for the release (.jar, -sources.jar, -javadoc.jar, .pom).",
+                 "items": {
+                   "type": "string"
+                 }
+               }
+             },
+             "additionalProperties": false
+           },
+           "repo1_maven_org": {
+             "type": "object",
+             "description": "Authoritative release metadata directly parsed from maven-metadata.xml.",
+             "required": [
+               "lastUpdated",
+               "release",
+               "latest"
+             ],
+             "properties": {
+               "lastUpdated": {
+                 "type": "string",
+                 "pattern": "^[0-9]{14}$",
+                 "description": "Timestamp format YYYYMMDDHHMMSS as published by the repository manager."
+               },
+               "release": {
+                 "type": "string",
+                 "description": "Official current production release declared in metadata."
+               },
+               "latest": {
+                 "type": "string",
+                 "description": "Latest published version declared in metadata."
+               }
+             },
+             "additionalProperties": false
+           },
+           "osv_dev": {
+             "type": "object",
+             "description": "Vulnerability telemetry queried from the Open Source Vulnerabilities (OSV) API.",
+             "required": [
+               "vulns"
+             ],
+             "properties": {
+               "vulns": {
+                 "type": "array",
+                 "description": "List of active vulnerability advisories recorded against the coordinate version.",
+                 "items": {
+                   "type": "object",
+                   "required": [
+                     "id"
+                   ],
+                   "properties": {
+                     "id": {
+                       "type": "string",
+                       "description": "Primary advisory identifier (e.g., GHSA-..., CVE-...)."
+                     },
+                     "summary": {
+                       "type": "string",
+                       "description": "Brief description of the vulnerability."
+                     },
+                     "aliases": {
+                       "type": "array",
+                       "description": "Equivalent CVE or vendor advisory IDs.",
+                       "items": {
+                         "type": "string"
+                       }
+                     },
+                     "database_specific": {
+                       "type": "object",
+                       "properties": {
+                         "severity": {
+                           "type": "string",
+                           "enum": [
+                             "LOW",
+                             "MEDIUM",
+                             "HIGH",
+                             "CRITICAL"
+                           ],
+                           "description": "Normalized advisory severity level."
+                         }
+                       },
+                       "additionalProperties": true
+                     }
+                   },
+                   "additionalProperties": true
+                 }
+               }
+             },
+             "additionalProperties": false
+           }
+         },
+         "additionalProperties": false
+       },
+       "playwright_sources": {
+         "type": "object",
+         "description": "Usage and ranking metrics extracted from rendered web DOM interfaces.",
+         "required": [
+           "central_sonatype_com",
+           "libraries_io"
+         ],
+         "properties": {
+           "central_sonatype_com": {
+             "type": "object",
+             "description": "Consumer package dependents scraped from central.sonatype.com.",
+             "required": [
+               "directDependentsCount",
+               "transitiveDependentsCount"
+             ],
+             "properties": {
+               "directDependentsCount": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "description": "Count of components declaring this artifact directly."
+               },
+               "transitiveDependentsCount": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "description": "Count of components pulling this artifact as a transitive dependency."
+               }
+             },
+             "additionalProperties": false
+           },
+           "libraries_io": {
+             "type": "object",
+             "description": "Ecosystem adoption and repository hygiene scraped from libraries.io.",
+             "required": [
+               "dependentRepositoriesCount",
+               "dependentPackagesCount",
+               "sourceRank"
+             ],
+             "properties": {
+               "dependentRepositoriesCount": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "description": "Public source code repositories consuming this artifact."
+               },
+               "dependentPackagesCount": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "description": "Downstream published packages dependent on this coordinate."
+               },
+               "sourceRank": {
+                 "type": "integer",
+                 "minimum": 0,
+                 "description": "Libraries.io package quality assessment score."
+               }
+             },
+             "additionalProperties": false
+           }
+         },
+         "additionalProperties": false
+       }
+     },
+     "additionalProperties": false
+   }
+ }
+}
